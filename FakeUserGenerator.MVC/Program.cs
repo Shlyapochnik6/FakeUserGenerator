@@ -1,4 +1,5 @@
 using System.Reflection;
+using FakeUserGenerator.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+builder.Services.AddApplication();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
