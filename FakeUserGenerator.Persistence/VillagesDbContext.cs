@@ -8,7 +8,7 @@ public class VillagesDbContext : DbContext, IVillagesDbContext
 {
     public DbSet<Country> Countries { get; set; }
     public DbSet<Village> Villages { get; set; }
-    
+
     public VillagesDbContext(DbContextOptions<VillagesDbContext> options)
         : base(options)
     {
