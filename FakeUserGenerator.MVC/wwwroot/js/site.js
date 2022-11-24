@@ -1,10 +1,10 @@
 ﻿let count = 1;
 let seed = +Number(0);
-let countLoad = 1;
+let countLoad = 0;
 let enteredSeed = document.getElementById('input-seed');
 let seedBtn = document.getElementById('seed-btn');
 let selCountry = document.getElementById('sel-country');
-let bodyTable = document.getElementById('body-table');
+let bodyTable = document.getElementById('table-body');
 let allTable = document.getElementById('all-table');
 
 function generateRandomValue(min, max){
@@ -52,17 +52,14 @@ async function findTablePos() {
     const hBody = bodyTable.offsetHeight;
     const hTable = allTable.offsetHeight;
     const scroll = allTable.scrollTop;
-    const threshold = hBody - hTable / 5;
+    const threshold = hBody - hBody / 5;
     const position = scroll + hTable;
     if (position >= threshold && countLoad !== count) {
         countLoad = count;
-        seed += 10;
+        seed += Number(10);
         let response = await sendServer(10);
         addRowsTable(response);
-        enteredSeed.value = +enteredSeed.value + countLoad;
-        seed = seed + countLoad;
         countLoad = count;
-        seed.value = seed;
     }
 }
 
@@ -70,16 +67,22 @@ window.onload = async function(){
     seed = 20;
     let response = await sendServer(20);
     addRowsTable(response);
+    seed = 30;
     allTable.scrollTo(0, 0);
     count = 1;
     $(bodyTable).find('tr').remove();
 }
+
+allTable.addEventListener('scroll', async function () {
+    await findTablePos();
+})
 
 seedBtn.addEventListener('click', async () => {
     generateRandomSeed();
     seed = +enteredSeed.value;
     let response = await sendServer(20);
     addRowsTable(response);
+    seed = +Number(10)
     allTable.scrollTo(0, 0);
     count = 1;
     $(bodyTable).find('tr').remove();
@@ -94,15 +97,14 @@ enteredSeed.addEventListener('change', async () => {
     $(bodyTable).find('tr').remove();
 })
 
-window.onscroll = async function() {
-    setTimeout(await findTablePos(), 150);
-};
-
 selCountry.addEventListener('click', async () => {
+    count = 1;
+    countLoad = 1;
+    seed = 20;
+    enteredSeed.value = seed;
     let response = await sendServer(20);
     addRowsTable(response);
+    seed = 30;
     allTable.scrollTo(0, 0);
-    count = 1;
     $(bodyTable).find('tr').remove();
-    
 })
