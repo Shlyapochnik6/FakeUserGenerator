@@ -6,6 +6,8 @@ let seedBtn = document.getElementById('seed-btn');
 let selCountry = document.getElementById('sel-country');
 let bodyTable = document.getElementById('table-body');
 let allTable = document.getElementById('all-table');
+let errorsRange = document.getElementById('range-errors');
+let errorsInput = document.getElementById('input-count-errors');
 
 function generateRandomValue(min, max){
     return Math.round(min + Math.random() * (max - min));
@@ -17,11 +19,13 @@ function generateRandomSeed() {
     enteredSeed.value = Math.round(min + Math.random() * (max - min));
 }
 
-async function sendServer(addRowsCount) {
+async function sendServer(addRowsCount, errorCount) {
     let country = selCountry.options[selCountry.selectedIndex].value;
     return await fetch(`User/Index?rowsNum=${addRowsCount}&country=${country}`, {
         method: "POST",
-        body: JSON.stringify(seed),
+        body: JSON.stringify({
+            seed: seed, numberErrors: errorCount
+        }),
         headers: {
             "Content-Type": "application/json"
         }
@@ -36,8 +40,8 @@ function addRowsTable(response) {
             let html = `<tr>
             <td>${count++}</td>
             <td>${generateRandomValue(1000000, 9999999999)}</td>
-            <td>${item.name.substring(0, 40)}</td>
-            <td>${item.address.substring(0 ,40)}</td>
+            <td>${item.address.substring(0, 40)}</td>
+            <td>${item.name.substring(0 ,40)}</td>
             <td>${item.phoneNumber.substring(0, 40)}</td>
         </tr>`;
             let tr = document.createElement('tr');
@@ -57,7 +61,7 @@ async function findTablePos() {
     if (position >= threshold && countLoad !== count) {
         countLoad = count;
         seed += Number(10);
-        let response = await sendServer(10);
+        let response = await sendServer(10, errorsInput.value);
         addRowsTable(response);
         countLoad = count;
     }
@@ -65,7 +69,7 @@ async function findTablePos() {
 
 window.onload = async function(){
     seed = 20;
-    let response = await sendServer(20);
+    let response = await sendServer(20, errorsInput.value);
     addRowsTable(response);
     seed = 30;
     allTable.scrollTo(0, 0);
@@ -80,7 +84,7 @@ allTable.addEventListener('scroll', async function () {
 seedBtn.addEventListener('click', async () => {
     generateRandomSeed();
     seed = +enteredSeed.value;
-    let response = await sendServer(20);
+    let response = await sendServer(20, errorsInput.value);
     addRowsTable(response);
     seed = +Number(10)
     allTable.scrollTo(0, 0);
@@ -90,7 +94,7 @@ seedBtn.addEventListener('click', async () => {
 
 enteredSeed.addEventListener('change', async () => {
     seed = +enteredSeed.value;
-    let response = await sendServer(20);
+    let response = await sendServer(20, errorsInput.value);
     addRowsTable(response);
     allTable.scrollTo(0, 0);
     count = 1;
@@ -102,9 +106,31 @@ selCountry.addEventListener('click', async () => {
     countLoad = 1;
     seed = 20;
     enteredSeed.value = seed;
-    let response = await sendServer(20);
+    let response = await sendServer(20, errorsInput.value);
     addRowsTable(response);
     seed = 30;
     allTable.scrollTo(0, 0);
     $(bodyTable).find('tr').remove();
 })
+
+errorsRange.addEventListener('change', async () => {
+    errorsInput.value = errorsRange.value;
+    let response = await sendServer(20, errorsInput.value);
+    addRowsTable(response);
+    allTable.scrollTo(0, 0);
+    count = 1;
+    $(bodyTable).find('tr').remove();
+})
+
+errorsInput.addEventListener('change', async () => {
+    if (errorsInput.value > 1000){
+        errorsInput.value = 1000;
+    }
+    errorsRange.value = errorsInput.value;
+    let response = await sendServer(20, errorsInput.value);
+    addRowsTable(response);
+    allTable.scrollTo(0, 0);
+    count = 1;
+    $(bodyTable).find('tr').remove();
+})
+
