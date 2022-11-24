@@ -26,3 +26,22 @@ html {
   position: sticky;
   top: 0;
 }
+
+.diagonal-gradient {
+  background: linear-gradient(to bottom right, blue, pink);
+}
+
+.div-margins {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.custom-paddings {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.check-label {
+  display: block;
+}

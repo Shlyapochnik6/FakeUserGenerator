@@ -5,28 +5,31 @@
 }
 
 <div>
-    <div>
-        <span>Enter a country</span>
-        <select id="sel-country" min="0">
+    <div class="div-margins">
+        <span style="font-size: 15px"><strong>Enter a country</strong></span>
+        <select class="custom-paddings form-select" id="sel-country" min="0">
             <option value="en_CA" selected>Canada</option>
             <option value="ja">Japanese</option>
             <option value="sv">Sweden</option>
         </select>
     </div>
-    <div>
-        <span>Choose the number of errors</span>
-        <input type="range" value="0" min="0" max="10" step="0.2" id="range-errors"/>
-        <input type="number" min="0" max="1000" value="0" id="input-count-errors"/>
+    <div class="div-margins">
+        <span style="font-size: 15px"><strong>Choose the number of errors</strong></span>
+        <input class="custom-paddings form-range check-label" type="range" value="0" min="0" max="10" step="0.2" id="range-errors"/>
+        <input class="custom-paddings form-control check-label" type="number" min="0" max="1000" value="0" id="input-count-errors"/>
     </div>
-    <div>
-        <span>Set seed</span>
-        <input type="number" min="0" max="1000" value="0" id="input-seed">
-        <button type="button" id="seed-btn">Generate</button>
+    <div class="div-margins">
+        <span style="font-size: 15px"><strong>Set seed</strong></span>
+        <input class="custom-paddings form-control" type="number" min="0" max="1000" value="0" id="input-seed">
+        <button class="custom-paddings btn btn-outline-primary" type="button" id="seed-btn">Generate</button>
     </div>
+</div>
+<div class="csv-container">
+    <button onclick="tableToCSV()" class="btn btn-outline-primary">Download</button>
 </div>
 <div class="table-responsive container" id="all-table">
     <table id="table" class="table table-responsive table-bordered">
-        <thead class="sticky-head">
+        <thead class="sticky-head bg-light">
         <tr>
             <th scope="col">Position</th>
             <th scope="col">Id</th>
