@@ -9,7 +9,7 @@
         <span>Enter a country</span>
         <select id="sel-country" min="0">
             <option value="en_CA" selected>Canada</option>
-            <option value="en_IE">Ireland</option>
+            <option value="ja">Japanese</option>
             <option value="sv">Sweden</option>
         </select>
     </div>
@@ -24,19 +24,18 @@
         <button type="button" id="seed-btn">Generate</button>
     </div>
 </div>
-<div id="all-table">
-    <table id="table">
-        <thead>
+<div class="table-responsive container" id="all-table">
+    <table id="table" class="table table-responsive table-bordered">
+        <thead class="sticky-head">
         <tr>
-            <th>Position</th>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Address</th>
-            <th>PhoneNumber</th>
+            <th scope="col">Position</th>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Address</th>
+            <th scope="col">PhoneNumber</th>
         </tr>
         </thead>
-        <tbody id="body-table" height="2000">
-        </tbody>
+        <tbody id="table-body"></tbody>
     </table>
 </div>
 <script src="~/js/site.js"></script>
