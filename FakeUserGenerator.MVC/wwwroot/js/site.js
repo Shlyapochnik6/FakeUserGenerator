@@ -90,77 +90,96 @@ async function findTablePos() {
     const position = scroll + hTable;
     if (position >= threshold && countLoad !== count) {
         countLoad = count;
-        seed += Number(10);
+        countLoad = count;
+
+        seed += Number(10)
         let response = await sendServer(10, errorsInput.value);
         addRowsTable(response);
+
         countLoad = count;
     }
 }
 
 window.onload = async function(){
-    seed = 20;
+    let response = await sendServer(20)
+    addRowsTable(response)
+    seed = 10
+}
+
+seedBtn.addEventListener('click', async () => {
+    enteredSeed.value = +Number(+generateRandomValue(1000000, 9999999))
+    let text = +enteredSeed.value
+    bodyTable.innerHTML = ''
+    count = 1
+    countLoad = 1
+    seed = +Number(+text);
     let response = await sendServer(20, errorsInput.value);
     addRowsTable(response);
-    seed = 30;
-    allTable.scrollTo(0, 0);
-    count = 1;
-    $(bodyTable).find('tr').remove();
-}
+    seed = +Number(+text)+20;
+})
+
+enteredSeed.addEventListener("change", async function () {
+    let text = enteredSeed.value
+    bodyTable.innerHTML = ''
+    count = 1
+    countLoad = 1
+    seed = +Number(+text)
+    let response = await sendServer(20, errorsInput.value);
+    addRowsTable(response);
+    seed = +Number(+text)+20
+})
+
+selCountry.addEventListener("click", async function (){
+    let text = enteredSeed.value
+    bodyTable.innerHTML = ''
+    count = 1
+    countLoad = 1
+    seed = +Number(+text)
+    let response = await sendServer(20, errorsInput.value)
+    addRowsTable(response)
+    seed = +Number(+text)+20
+})
 
 allTable.addEventListener('scroll', async function () {
     await findTablePos();
 })
 
-seedBtn.addEventListener('click', async () => {
-    generateRandomSeed();
-    seed = +enteredSeed.value;
-    let response = await sendServer(20, errorsInput.value);
-    addRowsTable(response);
-    seed = +Number(10)
-    allTable.scrollTo(0, 0);
-    count = 1;
-    $(bodyTable).find('tr').remove();
-})
-
-enteredSeed.addEventListener('change', async () => {
-    seed = +enteredSeed.value;
-    let response = await sendServer(20, errorsInput.value);
-    addRowsTable(response);
-    allTable.scrollTo(0, 0);
-    count = 1;
-    $(bodyTable).find('tr').remove();
-})
-
-selCountry.addEventListener('click', async () => {
-    count = 1;
-    countLoad = 1;
-    seed = 20;
-    enteredSeed.value = seed;
-    let response = await sendServer(20, errorsInput.value);
-    addRowsTable(response);
-    seed = 30;
-    allTable.scrollTo(0, 0);
-    $(bodyTable).find('tr').remove();
+errorsRange.addEventListener('input', async () => {
+    errorsInput.value = Number(+errorsRange.value)
+    if (errorsRange.value === "0"){
+        errorsRange.value = 0
+    }
 })
 
 errorsRange.addEventListener('change', async () => {
-    errorsInput.value = errorsRange.value;
-    let response = await sendServer(20, errorsInput.value);
+    let text = +enteredSeed.value
+    bodyTable.innerHTML = ''
+    count = 1
+    countLoad = 1
+    text = +enteredSeed.value
+    seed = +Number(+text);
+    let response = await sendServer(20, +errorsInput.value);
     addRowsTable(response);
-    allTable.scrollTo(0, 0);
-    count = 1;
-    $(bodyTable).find('tr').remove();
+    seed = +Number(+text)+20;
 })
 
-errorsInput.addEventListener('change', async () => {
-    if (errorsInput.value > 1000){
-        errorsInput.value = 1000;
-    }
-    errorsRange.value = errorsInput.value;
-    let response = await sendServer(20, errorsInput.value);
+errorsInput.addEventListener("change", async function () {
+    let text = errorsInput.value
+    if (errorsInput.value > 1000)
+        errorsInput.value = 1000
+    text = enteredSeed.value
+    if (errorsInput.value <= 10)
+        errorsRange.value = Number(+errorsInput.value)
+    else errorsRange.value = 10
+    text = enteredSeed.value
+    bodyTable.innerHTML = ''
+    count = 1
+    countLoad = 1
+    text = enteredSeed.value
+    seed = +Number(+text)
+    let response = await sendServer(20, +errorsInput.value);
     addRowsTable(response);
-    allTable.scrollTo(0, 0);
-    count = 1;
-    $(bodyTable).find('tr').remove();
+    seed = +Number(+text)+20;
 })
+
 
