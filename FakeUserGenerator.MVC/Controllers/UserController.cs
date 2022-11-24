@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FakeUserGenerator.Application.CQs.User.Queries.GetUsersList;
 using FakeUserGenerator.Domain;
+using FakeUserGenerator.MVC.Models;
 using FakeUserGenerator.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -24,13 +25,14 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult> Index(int rowsNum, string country, [FromBody] int seed)
+    public async Task<ActionResult> Index([FromBody] UserData userData, int rowsNum, string country)
     {
         var query = new GetUsersListQuery()
         {
-            Seed = seed,
+            Seed = userData.Seed,
             RowsNum = rowsNum,
-            Country = country
+            Country = country,
+            NumberErrors = userData.NumberErrors
         };
         var users = await _mediator.Send(query);
         return Ok(users);

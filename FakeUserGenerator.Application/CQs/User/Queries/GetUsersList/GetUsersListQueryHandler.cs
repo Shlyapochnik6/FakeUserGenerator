@@ -19,17 +19,19 @@ public class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery, List<
         var faker = new Faker(request.Country);
         var people = new List<UserDto>();
         var rows = request.RowsNum;
+        var errorGenerator = new Error(request.Country, request.Seed, request.NumberErrors);
         for (var s = request.Seed; s < request.Seed + rows; s++)
         {
             faker.Random = new Randomizer(s);
             var fullName = new UserName(request.Country, s).GenerateName();
             var phoneNumber = new PhoneNumber(request.Country, faker).GeneratePhone();
             var address = new UserAddress(request.Country, _dbContext, s).GenerateAddress();
+            var errors = errorGenerator.Generate(fullName, address, phoneNumber);
             var user = new UserDto()
             {
-                Address = address,
-                Name = fullName,
-                PhoneNumber = phoneNumber
+                Address = errors[0],
+                Name = errors[1],
+                PhoneNumber = errors[2]
             };
             people.Add(user);
         }
