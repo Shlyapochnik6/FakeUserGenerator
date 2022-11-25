@@ -91,16 +91,15 @@ async function findTablePos() {
     if (position >= threshold && countLoad !== count) {
         countLoad = count;
         countLoad = count;
-
         seed += Number(10)
         let response = await sendServer(10, errorsInput.value);
         addRowsTable(response);
-
         countLoad = count;
     }
 }
 
 window.onload = async function(){
+    console.log(enteredSeed.value)
     let response = await sendServer(20)
     addRowsTable(response)
     seed = 10
@@ -113,23 +112,39 @@ seedBtn.addEventListener('click', async () => {
     count = 1
     countLoad = 1
     seed = +Number(+text);
+    console.log("generate", seed)
     let response = await sendServer(20, errorsInput.value);
     addRowsTable(response);
     seed = +Number(+text)+20;
+    console.log("generate finish", seed)
 })
 
-enteredSeed.addEventListener("change", async function () {
-    let text = enteredSeed.value
+enteredSeed.addEventListener('change', async function () {
+    let text = +0;
+    if (enteredSeed.value < 0 || enteredSeed.value === '') {
+        enteredSeed.value = +0;
+        text = +enteredSeed.value;
+        seed = +Number(+text)
+    }
+    if (enteredSeed.value > 9999999) {
+        enteredSeed.value = +9999999;
+        text = +enteredSeed.value;
+        seed = +Number(+text)
+    }
+    text = +enteredSeed.value;
+    seed = +Number(+text);
+    console.log("create 20 seed", seed)
     bodyTable.innerHTML = ''
     count = 1
     countLoad = 1
-    seed = +Number(+text)
+    console.log("input", seed)
     let response = await sendServer(20, errorsInput.value);
     addRowsTable(response);
     seed = +Number(+text)+20
+    console.log(enteredSeed.value)
 })
 
-selCountry.addEventListener("click", async function (){
+selCountry.addEventListener('change', async function (){
     let text = enteredSeed.value
     bodyTable.innerHTML = ''
     count = 1
@@ -138,13 +153,14 @@ selCountry.addEventListener("click", async function (){
     let response = await sendServer(20, errorsInput.value)
     addRowsTable(response)
     seed = +Number(+text)+20
+    console.log('select finish', seed)
 })
 
 allTable.addEventListener('scroll', async function () {
     await findTablePos();
 })
 
-errorsRange.addEventListener('input', async () => {
+errorsRange.addEventListener('input', () => {
     errorsInput.value = Number(+errorsRange.value)
     if (errorsRange.value === "0"){
         errorsRange.value = 0
@@ -163,14 +179,22 @@ errorsRange.addEventListener('change', async () => {
     seed = +Number(+text)+20;
 })
 
-errorsInput.addEventListener("change", async function () {
-    let text = errorsInput.value
-    if (errorsInput.value > 1000)
+errorsInput.addEventListener('change', async function () {
+    let text = +errorsInput.value;
+    if (+errorsInput.value < 0) {
+        errorsInput.value = +0;
+        errorsRange.value = +0;
+    }
+    if (errorsInput.value > 1000){
         errorsInput.value = 1000
-    text = enteredSeed.value
-    if (errorsInput.value <= 10)
+    }
+    text = +enteredSeed.value
+    if (errorsInput.value <= 10){
         errorsRange.value = Number(+errorsInput.value)
-    else errorsRange.value = 10
+    }
+    else {
+        errorsRange.value = 10
+    }
     text = enteredSeed.value
     bodyTable.innerHTML = ''
     count = 1
